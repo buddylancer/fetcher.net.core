@@ -43,7 +43,7 @@ namespace Bula.Objects {
         /// <summary>
         /// Get private variables.
         /// </summary>
-         public static Hashtable GetPrivateVars() {
+        public static Hashtable GetPrivateVars() {
             return Vars;
         }
 
@@ -242,10 +242,10 @@ namespace Bula.Objects {
             pageInfo.Remove("page");
             for (int n = 0; n < SIZE(pages); n += 4) {
                 if (EQ(pages[n], page)) {
-                    pageInfo["page"] = pages[n+0];
-                    pageInfo["class"] = pages[n+1];
-                    pageInfo["post_required"] = pages[n+2];
-                    pageInfo["code_required"] = pages[n+3];
+                    pageInfo["page"] = pages[n + 0];
+                    pageInfo["class"] = pages[n + 1];
+                    pageInfo["post_required"] = pages[n + 2];
+                    pageInfo["code_required"] = pages[n + 3];
                     break;
                 }
             }
@@ -286,22 +286,23 @@ namespace Bula.Objects {
         /// <returns>Requested variables.</returns>
         public static Hashtable GetVars(int type) {
             Hashtable hash = new Hashtable();
-            //System.Collections.Specialized.NameValueCollection vars = null;
+            var httpRequest = CompatibilityHttpContextAccessor.Current.Request;
             IEnumerator<KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>> vars = null;
             switch (type)
             {
                 case Request.INPUT_GET:
                 default:
-                    vars = CompatibilityHttpContextAccessor.Current.Request.Query.GetEnumerator();
+                    vars = httpRequest.Query.GetEnumerator();
                     break;
                 case Request.INPUT_POST:
-                    vars = CompatibilityHttpContextAccessor.Current.Request.Form.GetEnumerator();
+                    if (httpRequest.Method != "POST")
+                        return hash;
+                    vars = httpRequest.Form.GetEnumerator();
                     break;
                 case Request.INPUT_SERVER:
-                    vars = CompatibilityHttpContextAccessor.Current.Request.Headers.GetEnumerator();
+                    vars = httpRequest.Headers.GetEnumerator();
                     break;
             }
-            //IEnumerator keys = vars.AllKeys.GetEnumerator();
             while (vars.MoveNext()) {
                 String key = vars.Current.Key;
                 String[] values = vars.Current.Value;
@@ -322,18 +323,40 @@ namespace Bula.Objects {
         /// <param name="name">Variable name.</param>
         /// <returns>Requested variable.</returns>
         public static String GetVar(int type, String name) {
-            //System.Collections.Specialized.NameValueCollection vars = null;
+            var httpRequest = CompatibilityHttpContextAccessor.Current.Request;
             switch (type)
             {
                 case Request.INPUT_GET:
                 default:
-                    return CompatibilityHttpContextAccessor.Current.Request.Query[name];
+                    if (httpRequest.Query.ContainsKey(name))
+                        return httpRequest.Query[name];
+                    else
+                        return null;
                 case Request.INPUT_POST:
-                    return CompatibilityHttpContextAccessor.Current.Request.Form[name];
-                case Request.INPUT_SERVER:
-                    return CompatibilityHttpContextAccessor.Current.Request.Headers[name]; // ServeVariables???
+                    if (httpRequest.Method == "POST" && httpRequest.Form.ContainsKey(name))
+                        return httpRequest.Form[name];
+                    else
+                        return null;
+                case Request.INPUT_SERVER: // ServeVariables???
+                    if (mapHeaders.ContainsKey(name)) {
+                        if (httpRequest.Headers.ContainsKey(mapHeaders[name]))
+                            return httpRequest.Headers[mapHeaders[name]];
+                        else
+                            return null;
+                    }
+                    else
+                        return null;
             }
-   
+
         }
+
+        private static Dictionary<string, string> mapHeaders = new Dictionary<string, string>()
+        {
+            { "HTTP_USER_AGENT", "User-Agent" },
+            //{ "APPL_PHYSICAL_PATH", null },
+            { "HTTP_HOST", "Host" },
+            { "QUERY_STRING", "Query" },
+            { "HTTP_REFERER", "Referer" }
+        };
     }
 }

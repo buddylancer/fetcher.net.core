@@ -127,8 +127,9 @@ namespace Bula.Fetcher {
         public void Initialize() {
             //------------------------------------------------------------------------------
             // You can change something below this line if you know what are you doing :)
-            var rootDir = Request.GetVar(Request.INPUT_SERVER, "APPL_PHYSICAL_PATH");
-            for (int n = 0; n <= 3; n++) {
+            //var rootDir = Request.GetVar(Request.INPUT_SERVER, "APPL_PHYSICAL_PATH");
+            var rootDir = System.IO.Directory.GetCurrentDirectory();
+            for (int n = 0; n < 3; n++) {
                 var lastSlashIndex = rootDir.LastIndexOf("\\");
                 rootDir = rootDir.Substring(0, lastSlashIndex);
             }
