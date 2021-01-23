@@ -8,7 +8,9 @@ namespace Bula.Objects {
 
     using Bula.Objects;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Text.RegularExpressions;
+    using AspNetCoreCompatibility;
 
     /// <summary>
     /// Helper class for processing query/form request.
@@ -284,25 +286,25 @@ namespace Bula.Objects {
         /// <returns>Requested variables.</returns>
         public static Hashtable GetVars(int type) {
             Hashtable hash = new Hashtable();
-            System.Collections.Specialized.NameValueCollection vars = null;
+            //System.Collections.Specialized.NameValueCollection vars = null;
+            IEnumerator<KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>> vars = null;
             switch (type)
             {
                 case Request.INPUT_GET:
                 default:
-                    vars = System.Web.HttpContext.Current.Request.QueryString;
+                    vars = CompatibilityHttpContextAccessor.Current.Request.Query.GetEnumerator();
                     break;
                 case Request.INPUT_POST:
-                    vars = System.Web.HttpContext.Current.Request.Form;
+                    vars = CompatibilityHttpContextAccessor.Current.Request.Form.GetEnumerator();
                     break;
                 case Request.INPUT_SERVER:
-                    vars = System.Web.HttpContext.Current.Request.ServerVariables;
+                    vars = CompatibilityHttpContextAccessor.Current.Request.Headers.GetEnumerator();
                     break;
             }
-            IEnumerator keys = vars.AllKeys.GetEnumerator();
-            for (int n = 0; n < vars.Count; n++)
-            {
-                String key = vars.GetKey(n);
-                String[] values = vars.GetValues(n);
+            //IEnumerator keys = vars.AllKeys.GetEnumerator();
+            while (vars.MoveNext()) {
+                String key = vars.Current.Key;
+                String[] values = vars.Current.Value;
                 if (key == null) {
                     for (int v = 0; v < values.Length; v++)
                         hash.Add(values[v], null);
@@ -320,21 +322,18 @@ namespace Bula.Objects {
         /// <param name="name">Variable name.</param>
         /// <returns>Requested variable.</returns>
         public static String GetVar(int type, String name) {
-            System.Collections.Specialized.NameValueCollection vars = null;
+            //System.Collections.Specialized.NameValueCollection vars = null;
             switch (type)
             {
                 case Request.INPUT_GET:
                 default:
-                    vars = System.Web.HttpContext.Current.Request.QueryString;
-                    break;
+                    return CompatibilityHttpContextAccessor.Current.Request.Query[name];
                 case Request.INPUT_POST:
-                    vars = System.Web.HttpContext.Current.Request.Form;
-                    break;
+                    return CompatibilityHttpContextAccessor.Current.Request.Form[name];
                 case Request.INPUT_SERVER:
-                    vars = System.Web.HttpContext.Current.Request.ServerVariables;
-                    break;
+                    return CompatibilityHttpContextAccessor.Current.Request.Headers[name]; // ServeVariables???
             }
-            return vars[name];    
+   
         }
     }
 }

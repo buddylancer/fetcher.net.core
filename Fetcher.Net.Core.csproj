@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Bula\Fetcher\Web.Core\**" />
+    <Compile Remove="Bula\Fetcher\Web\**" />
+    <EmbeddedResource Remove="Bula\Fetcher\Web.Core\**" />
+    <EmbeddedResource Remove="Bula\Fetcher\Web\**" />
+    <None Remove="Bula\Fetcher\Web.Core\**" />
+    <None Remove="Bula\Fetcher\Web\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Bula\Fetcher\Controller\Logger.cs" />
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCoreCompatibility" Version="1.1.0" />
+    <PackageReference Include="MySql.Data" Version="8.0.23" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+</Project>

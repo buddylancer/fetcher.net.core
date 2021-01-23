@@ -4,7 +4,8 @@
 // Licensed under the MIT license.
 
 namespace Bula.Objects {
-    using System;
+	using System;
+    using AspNetCoreCompatibility;
 
     using System.Web;
 
@@ -12,12 +13,15 @@ namespace Bula.Objects {
     /// Helper class for processing server response.
     /// </summary>
     public class Response : Bula.Meta {
+
         /// <summary>
         /// Write text to current response.
         /// </summary>
         /// <param name="input">Text to write.</param>
         public static void Write(String input) {
-            HttpContext.Current.Response.Write(input);
+            byte[] bytes = System.Text.Encoding.ASCII.GetBytes(input);
+            foreach (byte output in bytes)
+                CompatibilityHttpContextAccessor.Current.Response.Body.WriteByte(output);
         }
 
         /// <summary>
@@ -26,7 +30,7 @@ namespace Bula.Objects {
         /// <param name="name">Header name.</param>
         /// <param name="value">Header value.</param>
         public static void WriteHeader(String name, String value) {
-            HttpContext.Current.Response.Headers.Add(name, value);
+            CompatibilityHttpContextAccessor.Current.Response.Headers.Add(name, value);
         }
 
         /// <summary>
@@ -35,7 +39,7 @@ namespace Bula.Objects {
         /// <param name="input">Text to write before ending response.</param>
         public static void End(String input) {
             Write(input);
-            HttpContext.Current.Response.End();
+            CompatibilityHttpContextAccessor.Current.Response.Body.Close();
         }
     }
 
