@@ -13,7 +13,7 @@ namespace Bula.Objects {
     /// Helper class for processing server response.
     /// </summary>
     public class Response : Bula.Meta {
-        private static readonly int bufSize = 16384;
+        private static readonly int bufSize = 1024;
 
         /// <summary>
         /// Write text to current response.
@@ -25,10 +25,12 @@ namespace Bula.Objects {
                 return;
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input);
             for (int start = 0; start < bytes.Length; start += bufSize) {
+                System.Threading.Thread.Sleep(20);
                 int length = bufSize;
                 if (start + length > bytes.Length)
                     length = bytes.Length - start;
-                CompatibilityHttpContextAccessor.Current.Response.Body.Write(bytes, start, length);
+                CompatibilityHttpContextAccessor.Current.Response.Body.WriteAsync(bytes, start, length);
+                CompatibilityHttpContextAccessor.Current.Response.Body.Flush();
             }
         }
 
@@ -50,7 +52,6 @@ namespace Bula.Objects {
         public static void End(String input) {
             if (input.Length > 0)
                 Write(input);
-            CompatibilityHttpContextAccessor.Current.Response.Body.Flush();
             CompatibilityHttpContextAccessor.Current.Response.Body.Close();
             CompatibilityHttpContextAccessor.Current.Response.Body.Dispose();
        }

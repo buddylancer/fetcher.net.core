@@ -24,12 +24,16 @@ namespace Bula.Fetcher.Controller.Testing {
             Request.Initialize();
             Request.ExtractAllVars();
 
-             // Check source
-            if (!Request.Contains("source"))
+            // Check source
+            if (!Request.Contains("source")) {
                 Response.End("Source is required!");
+                return;
+            }
             var source = Request.Get("source");
-            if (BLANK(source))
-                Response.End("Empty source!");       
+            if (BLANK(source)) {
+                Response.End("Empty source!");
+                return;
+            }
 
             Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
             var content = Helper.ReadAllText(CAT(this.context.LocalRoot, "local/tests/input/U.S. News - ", source, ".xml"));
