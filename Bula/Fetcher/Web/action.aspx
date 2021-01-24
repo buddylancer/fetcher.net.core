@@ -1,1 +1,0 @@
-﻿<%@ Page Language="C#" %><% (new Bula.Fetcher.Controller.Action(new Bula.Fetcher.Context())).Execute(); %>
