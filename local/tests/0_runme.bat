@@ -9,9 +9,9 @@ goto :END
 rem Set your test site (local) info:
 set site=http://www.ff.com:8000
 set mobile=http://m.ff.com:8000
-set ext=aspx
-set index_page=index.%ext%
-set action_page=action.%ext%
+set ext=
+set index_page=index%ext%
+set action_page=action%ext%
 
 rem Set security code exactly the same as in Config!
 set code=1234
@@ -36,6 +36,7 @@ call 1_create.bat
 :FETCH
 echo *** Starting 2_fetch.bat >> %log%
 call 2_fetch.bat
+pause
 
 :STYLES
 echo *** Starting 3_styles.bat >> %log%
