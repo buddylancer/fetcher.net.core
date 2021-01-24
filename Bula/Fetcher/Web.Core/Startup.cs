@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreCompatibility;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace Web.Core
 {
@@ -22,6 +24,8 @@ namespace Web.Core
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
+			app.UseRewriter(new RewriteOptions().AddIISUrlRewrite(env.ContentRootFileProvider, "urlrewrite.xml"));
+			
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
@@ -30,6 +34,7 @@ namespace Web.Core
 
 			app.UseStaticFiles();
 			app.UseMvc();
+
 		}
 	}
 }
