@@ -15,9 +15,9 @@ namespace Bula.Fetcher {
         /// Index page name 
         public const String INDEX_PAGE = "";
         /// Action page name 
-        public const String ACTION_PAGE = "action.aspx";
+        public const String ACTION_PAGE = "action";
         /// RSS-feeds page name 
-        public const String RSS_PAGE = "rss.aspx";
+        public const String RSS_PAGE = "rss";
 
         /// Security code 
         public const String SECURITY_CODE = "1234";
@@ -26,9 +26,9 @@ namespace Bula.Fetcher {
         public const Boolean FINE_URLS = false;
 
         /// Cache Web-pages 
-        public const Boolean CACHE_PAGES = true;
+        public const Boolean CACHE_PAGES = false;
         /// Cache RSS-feeds 
-        public const Boolean CACHE_RSS = true;
+        public const Boolean CACHE_RSS = false;
         /// Show what source an item is originally from 
         public const Boolean SHOW_FROM = false;
         /// Show an item or immediately redirect to external source item 

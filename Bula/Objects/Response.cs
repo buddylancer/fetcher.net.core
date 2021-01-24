@@ -13,15 +13,23 @@ namespace Bula.Objects {
     /// Helper class for processing server response.
     /// </summary>
     public class Response : Bula.Meta {
+        private static readonly int bufSize = 16384;
 
         /// <summary>
         /// Write text to current response.
         /// </summary>
         /// <param name="input">Text to write.</param>
-        public static void Write(String input) {
-            byte[] bytes = System.Text.Encoding.ASCII.GetBytes(input);
-            foreach (byte output in bytes)
-                CompatibilityHttpContextAccessor.Current.Response.Body.WriteByte(output);
+        public static void Write(String input)
+        {
+            if (input.Length == 0)
+                return;
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input);
+            for (int start = 0; start < bytes.Length; start += bufSize) {
+                int length = bufSize;
+                if (start + length > bytes.Length)
+                    length = bytes.Length - start;
+                CompatibilityHttpContextAccessor.Current.Response.Body.Write(bytes, start, length);
+            }
         }
 
         /// <summary>
@@ -30,6 +38,8 @@ namespace Bula.Objects {
         /// <param name="name">Header name.</param>
         /// <param name="value">Header value.</param>
         public static void WriteHeader(String name, String value) {
+            if (CompatibilityHttpContextAccessor.Current.Response.Headers.ContainsKey(name))
+                CompatibilityHttpContextAccessor.Current.Response.Headers.Remove(name);
             CompatibilityHttpContextAccessor.Current.Response.Headers.Add(name, value);
         }
 
@@ -38,9 +48,12 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="input">Text to write before ending response.</param>
         public static void End(String input) {
-            Write(input);
+            if (input.Length > 0)
+                Write(input);
+            CompatibilityHttpContextAccessor.Current.Response.Body.Flush();
             CompatibilityHttpContextAccessor.Current.Response.Body.Close();
-        }
+            CompatibilityHttpContextAccessor.Current.Response.Body.Dispose();
+       }
     }
 
 }

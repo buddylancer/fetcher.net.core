@@ -1,10 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <Authors>Buddy Lancer</Authors>
     <Product>Buddy Fetcher for .NET Core</Product>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Testing\call.cshtml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Pages\Index.cshtml.cs" />
@@ -22,6 +30,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Testing\call.cshtml" />
   </ItemGroup>
 
 </Project>

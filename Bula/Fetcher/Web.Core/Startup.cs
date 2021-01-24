@@ -28,6 +28,7 @@ namespace Web.Core
 			}
 			app.UseAspNetCompatibility();
 
+			app.UseStaticFiles();
 			app.UseMvc();
 		}
 	}
