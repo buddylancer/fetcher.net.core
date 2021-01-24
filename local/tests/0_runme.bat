@@ -36,7 +36,6 @@ call 1_create.bat
 :FETCH
 echo *** Starting 2_fetch.bat >> %log%
 call 2_fetch.bat
-pause
 
 :STYLES
 echo *** Starting 3_styles.bat >> %log%
