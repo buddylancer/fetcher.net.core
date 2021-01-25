@@ -2,29 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Buddy Lancer</Authors>
+    <Company />
+    <Product>Buddy Fetcher</Product>
+    <Copyright>Copyright (c) 2020-2021 Buddy Lancer</Copyright>
+    <Description>Simple RSS fetcher/aggregator (.NET Core/MySQL)</Description>
+    <PackageProjectUrl>http://github.com/buddylancer/fetcher.net.core</PackageProjectUrl>
+    <PackageId>Bula.Fetcher.Net.Core</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Bula\Fetcher\Web.Core\**" />
-    <Compile Remove="Bula\Fetcher\Web\**" />
     <EmbeddedResource Remove="Bula\Fetcher\Web.Core\**" />
-    <EmbeddedResource Remove="Bula\Fetcher\Web\**" />
     <None Remove="Bula\Fetcher\Web.Core\**" />
-    <None Remove="Bula\Fetcher\Web\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Bula\Fetcher\Controller\Logger.cs" />
-    <Compile Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AspNetCoreCompatibility" Version="1.1.0" />
     <PackageReference Include="MySql.Data" Version="8.0.23" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>

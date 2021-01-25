@@ -10,7 +10,6 @@ namespace Bula.Objects {
     using System.Collections;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
-    using AspNetCoreCompatibility;
 
     /// <summary>
     /// Helper class for processing query/form request.
@@ -31,6 +30,10 @@ namespace Bula.Objects {
         public const int INPUT_ENV = 4;
         /// Enum value (type) for getting SERVER parameters 
         public const int INPUT_SERVER = 5;
+
+        private static Microsoft.AspNetCore.Http.HttpRequest CurrentRequest() {
+            return AspNetCoreCompatibility.CompatibilityHttpContextAccessor.Current.Request;
+        }
 
         static Request() { Initialize(); }
 
@@ -286,21 +289,20 @@ namespace Bula.Objects {
         /// <returns>Requested variables.</returns>
         public static Hashtable GetVars(int type) {
             Hashtable hash = new Hashtable();
-            var httpRequest = CompatibilityHttpContextAccessor.Current.Request;
             IEnumerator<KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>> vars = null;
             switch (type)
             {
                 case Request.INPUT_GET:
                 default:
-                    vars = httpRequest.Query.GetEnumerator();
+                    vars = CurrentRequest().Query.GetEnumerator();
                     break;
                 case Request.INPUT_POST:
-                    if (httpRequest.Method != "POST")
+                    if (CurrentRequest().Method != "POST")
                         return hash;
-                    vars = httpRequest.Form.GetEnumerator();
+                    vars = CurrentRequest().Form.GetEnumerator();
                     break;
                 case Request.INPUT_SERVER:
-                    vars = httpRequest.Headers.GetEnumerator();
+                    vars = CurrentRequest().Headers.GetEnumerator();
                     break;
             }
             while (vars.MoveNext()) {
@@ -323,24 +325,23 @@ namespace Bula.Objects {
         /// <param name="name">Variable name.</param>
         /// <returns>Requested variable.</returns>
         public static String GetVar(int type, String name) {
-            var httpRequest = CompatibilityHttpContextAccessor.Current.Request;
             switch (type)
             {
                 case Request.INPUT_GET:
                 default:
-                    if (httpRequest.Query.ContainsKey(name))
-                        return httpRequest.Query[name];
+                    if (CurrentRequest().Query.ContainsKey(name))
+                        return CurrentRequest().Query[name];
                     else
                         return null;
                 case Request.INPUT_POST:
-                    if (httpRequest.Method == "POST" && httpRequest.Form.ContainsKey(name))
-                        return httpRequest.Form[name];
+                    if (CurrentRequest().Method == "POST" && CurrentRequest().Form.ContainsKey(name))
+                        return CurrentRequest().Form[name];
                     else
                         return null;
                 case Request.INPUT_SERVER: // ServeVariables???
                     if (mapHeaders.ContainsKey(name)) {
-                        if (httpRequest.Headers.ContainsKey(mapHeaders[name]))
-                            return httpRequest.Headers[mapHeaders[name]];
+                        if (CurrentRequest().Headers.ContainsKey(mapHeaders[name]))
+                            return CurrentRequest().Headers[mapHeaders[name]];
                         else
                             return null;
                     }

@@ -5,15 +5,16 @@
 
 namespace Bula.Objects {
     using System;
-    using AspNetCoreCompatibility;
-
-    using System.Web;
 
     /// <summary>
     /// Helper class for processing server response.
     /// </summary>
     public class Response : Bula.Meta {
         private static readonly int bufSize = 1024;
+
+        private static Microsoft.AspNetCore.Http.HttpResponse CurrentResponse() {
+            return AspNetCoreCompatibility.CompatibilityHttpContextAccessor.Current.Response;
+        }
 
         /// <summary>
         /// Write text to current response.
@@ -25,12 +26,12 @@ namespace Bula.Objects {
                 return;
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input);
             for (int start = 0; start < bytes.Length; start += bufSize) {
-                System.Threading.Thread.Sleep(20);
+                System.Threading.Thread.Sleep(20); //TODO -- workaround for now
                 int length = bufSize;
                 if (start + length > bytes.Length)
                     length = bytes.Length - start;
-                CompatibilityHttpContextAccessor.Current.Response.Body.WriteAsync(bytes, start, length);
-                CompatibilityHttpContextAccessor.Current.Response.Body.Flush();
+                CurrentResponse().Body.WriteAsync(bytes, start, length);
+                CurrentResponse().Body.Flush();
             }
         }
 
@@ -40,9 +41,9 @@ namespace Bula.Objects {
         /// <param name="name">Header name.</param>
         /// <param name="value">Header value.</param>
         public static void WriteHeader(String name, String value) {
-            if (CompatibilityHttpContextAccessor.Current.Response.Headers.ContainsKey(name))
-                CompatibilityHttpContextAccessor.Current.Response.Headers.Remove(name);
-            CompatibilityHttpContextAccessor.Current.Response.Headers.Add(name, value);
+            if (CurrentResponse().Headers.ContainsKey(name))
+                CurrentResponse().Headers.Remove(name);
+            CurrentResponse().Headers.Add(name, value);
         }
 
         /// <summary>
@@ -52,9 +53,8 @@ namespace Bula.Objects {
         public static void End(String input) {
             if (input.Length > 0)
                 Write(input);
-            CompatibilityHttpContextAccessor.Current.Response.Body.Close();
-            CompatibilityHttpContextAccessor.Current.Response.Body.Dispose();
+            CurrentResponse().Body.Close();
+            CurrentResponse().Body.Dispose();
        }
     }
-
 }
