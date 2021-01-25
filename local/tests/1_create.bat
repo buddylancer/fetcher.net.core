@@ -10,8 +10,7 @@ set dbname=dbusnews
 set dbuser=dbusnews
 set dbpass=dbusnews
 
-rem set mysql_with_user=%mysql% --user=%dbuser% --password=%dbpass%
-set mysql_with_user=%mysql% --user=root --password=admin
+set mysql_with_user=%mysql% --user=%dbuser% --password=%dbpass%
 
 set result=%folder%\log.txt
 set log1=%output%\%result%
