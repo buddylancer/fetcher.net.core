@@ -1,97 +1,152 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<rewrite>
-    <rules>
-        <rule name="image">
-            <match url="^images/$" ignoreCase="false"/>
-            <action type="Rewrite" url="page404.html"/>
-        </rule>
-        <rule name="rss">
-            <match url="^rss[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="rss"/>
-        </rule>
-        <rule name="rss/?.xml">
-            <match url="^rss/([A-Za-z0-9\.]*).xml*$" ignoreCase="false"/>
-            <action type="Rewrite" url="rss?filter={R:1}" appendQueryString="false"/>
-        </rule>
-        <rule name="rss/filter/?">
-            <match url="^rss/filter/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="rss?filter={R:1}" appendQueryString="false"/>
-        </rule>
-        <rule name="rss/source/?">
-            <match url="^rss/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="rss?source={R:1}" appendQueryString="false"/>
-        </rule>
-        <rule name="rss/source/?/filter/?">
-            <match url="^rss/source/([A-Za-z0-9\.]*)/filter/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="rss?source={R:1}&amp;filter={R:2}" appendQueryString="false"/>
-        </rule>
-        <rule name="rss/filtes/?/source/?">
-            <match url="^rss/filter/([A-Za-z0-9\.]*)/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="rss?filter={R:1}&amp;source={R:2}" appendQueryString="false"/>
-        </rule>
-        <rule name="items/source/?/filter/?/list/?">
-            <match url="^items/source/([A-Za-z0-9\.]*)/filter/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=items&amp;source={R:1}&amp;filter={R:2}&amp;list={R:3}" appendQueryString="false"/>
-        </rule>
-        <rule name="items/filter/?/source/?/list/?">
-            <match url="^items/filter/([A-Za-z0-9\.]*)/source/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=items&amp;filter={R:1}&amp;source={R:2}&amp;list={R:3}" appendQueryString="false"/>
-        </rule>
-        <rule name="items/source/?/filter/?">
-            <match url="^items/source/([A-Za-z0-9\.]*)/filter/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=items&amp;source={R:1}&amp;filter={R:2}" appendQueryString="false"/>
-        </rule>
-        <rule name="items/filtes/?/source/?">
-            <match url="^items/filter/([A-Za-z0-9\.]*)/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=items&amp;filter={R:1}&amp;source={R:2}" appendQueryString="false"/>
-        </rule>
-        <rule name="items/source/?/list/?">
-            <match url="^items/source/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=items&amp;source={R:1}&amp;list={R:2}" appendQueryString="false"/>
-        </rule>
-        <rule name="items/source/?">
-            <match url="^items/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=items&amp;source={R:1}" appendQueryString="false"/>
-        </rule>
-        <rule name="items/filter/?/list/?">
-            <match url="^items/filter/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=items&amp;filter={R:1}&amp;list={R:2}" appendQueryString="false"/>
-        </rule>
-        <rule name="items/filter/?">
-            <match url="^items/filter/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=items&amp;filter={R:1}" appendQueryString="false"/>
-        </rule>
-        <rule name="items/list/?">
-            <match url="^items/list/([0-9]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=items&amp;list={R:1}" appendQueryString="false"/>
-        </rule>
-        <rule name="items">
-            <match url="^items[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=items" appendQueryString="false"/>
-        </rule>
-        <rule name="sources">
-            <match url="^sources[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=sources" appendQueryString="false"/>
-        </rule>
-        <rule name="item/?/?">
-            <match url="^item/([0-9]*)/([A-Za-z0-9\-\.]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=view_item&amp;id={R:1}&amp;title={R:2}" appendQueryString="false"/>
-        </rule>
-        <rule name="item/?">
-            <match url="^item/([0-9]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="index?p=view_item&amp;id={R:1}" appendQueryString="false"/>
-        </rule>
-        <rule name="redirect/item/?">
-            <match url="^redirect/item/([0-9]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="action?p=do_redirect_item&amp;id={R:1}" appendQueryString="false"/>
-        </rule>
-        <rule name="redirect/item/?/?">
-            <match url="^redirect/item/([0-9]*)/([A-Za-z0-9\-\.]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="action?p=do_redirect_item&amp;id={R:1}&amp;title={R:2}" appendQueryString="false"/>
-        </rule>
-        <rule name="redirect/source/?">
-            <match url="^redirect/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false"/>
-            <action type="Rewrite" url="action?p=do_redirect_source&amp;source={R:1}" appendQueryString="false"/>
-        </rule>
-    </rules>
+﻿<rewrite>
+	<rules>
+		<rule name="Imported Rule 1">
+			<match url="^images/$" ignoreCase="false" />
+			<action type="Rewrite" url="page404.html" />
+		</rule>
+		<rule name="Imported Rule 2">
+			<match url="^rss[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="rss" />
+		</rule>
+		<rule name="Imported Rule 3">
+			<match url="^rss/([A-Za-z0-9\.]*).xml*$" ignoreCase="false" />
+			<action type="Rewrite" url="rss?filter={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 4">
+			<match url="^rss/filter/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="rss?filter={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 5">
+			<match url="^rss/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="rss?source={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 6">
+			<match url="^rss/source/([A-Za-z0-9\.]*)/filter/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="rss?source={R:1}&amp;filter={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 7">
+			<match url="^rss/filter/([A-Za-z0-9\.]*)/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="rss?filter={R:1}&amp;source={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 8">
+			<match url="^items/source/([A-Za-z0-9\.]*)/filter/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=items&amp;source={R:1}&amp;filter={R:2}&amp;list={R:3}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 9">
+			<match url="^items/filter/([A-Za-z0-9\.]*)/source/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=items&amp;filter={R:1}&amp;source={R:2}&amp;list={R:3}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 10">
+			<match url="^items/source/([A-Za-z0-9\.]*)/filter/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=items&amp;source={R:1}&amp;filter={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 11">
+			<match url="^items/filter/([A-Za-z0-9\.]*)/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=items&amp;filter={R:1}&amp;source={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 12">
+			<match url="^items/source/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=items&amp;source={R:1}&amp;list={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 13">
+			<match url="^items/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=items&amp;source={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 14">
+			<match url="^items/filter/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=items&amp;filter={R:1}&amp;list={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 15">
+			<match url="^items/filter/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=items&amp;filter={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 16">
+			<match url="^items/list/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=items&amp;list={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 17">
+			<match url="^items[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=items" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 18">
+			<match url="^api/items/source/([A-Za-z0-9\.]*)/filter/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=items&amp;source={R:1}&amp;filter={R:2}&amp;list={R:3}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 19">
+			<match url="^api/items/filter/([A-Za-z0-9\.]*)/source/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=items&amp;filter={R:1}&amp;source={R:2}&amp;list={R:3}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 20">
+			<match url="^api/items/source/([A-Za-z0-9\.]*)/filter/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=items&amp;source={R:1}&amp;filter={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 21">
+			<match url="^api/items/filter/([A-Za-z0-9\.]*)/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=items&amp;filter={R:1}&amp;source={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 22">
+			<match url="^api/items/source/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=items&amp;source={R:1}&amp;list={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 23">
+			<match url="^api/items/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=items&amp;source={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 24">
+			<match url="^api/items/filter/([A-Za-z0-9\.]*)/list/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=items&amp;filter={R:1}&amp;list={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 25">
+			<match url="^api/items/filter/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=items&amp;filter={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 26">
+			<match url="^api/items/list/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=items&amp;list={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 27">
+			<match url="^api/items[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=items" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 28">
+			<match url="^api[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 29">
+			<match url="^sources[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=sources" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 30">
+			<match url="^api/sources[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=sources" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 31">
+			<match url="^item/([0-9]*)/([A-Za-z0-9\-\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=view_item&amp;id={R:1}&amp;title={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 32">
+			<match url="^item/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?p=view_item&amp;id={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 33">
+			<match url="^api/item/([0-9]*)/([A-Za-z0-9\-\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=view_item&amp;id={R:1}&amp;title={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 34">
+			<match url="^api/item/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="index?api=rest&amp;p=view_item&amp;id={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 35">
+			<match url="^redirect/item/([0-9]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="action?p=do_redirect_item&amp;id={R:1}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 36">
+			<match url="^redirect/item/([0-9]*)/([A-Za-z0-9\-\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="action?p=do_redirect_item&amp;id={R:1}&amp;title={R:2}" appendQueryString="false" />
+		</rule>
+		<rule name="Imported Rule 37">
+			<match url="^redirect/source/([A-Za-z0-9\.]*)[/]*$" ignoreCase="false" />
+			<action type="Rewrite" url="action?p=do_redirect_source&amp;source={R:1}" appendQueryString="false" />
+		</rule>
+	</rules>
 </rewrite>

@@ -41,6 +41,7 @@ namespace Bula.Objects {
         /// <param name="name">Header name.</param>
         /// <param name="value">Header value.</param>
         public static void WriteHeader(String name, String value) {
+            //CurrentResponse().AppendHeader(name, value);
             if (CurrentResponse().Headers.ContainsKey(name))
                 CurrentResponse().Headers.Remove(name);
             CurrentResponse().Headers.Add(name, value);

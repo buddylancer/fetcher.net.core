@@ -24,6 +24,7 @@ namespace Bula.Fetcher.Controller {
             var output = Strings.StripSlashes(input);
             output = output.Replace("<", "&lt;");
             output = output.Replace(">", "&gt;");
+            output = output.Replace("&", "&amp;");
             output = output.Replace("\"", "&quot;");
             return output;
         }
@@ -121,7 +122,7 @@ namespace Bula.Fetcher.Controller {
             }
             else {
                 var prefix = EQ(pageName, "bottom") ? null : "Pages/";
-                content = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/", prefix, className));
+                content = engine.IncludeTemplate(CAT(prefix, className));
 
                 Helper.TestFileFolder(fileName);
                 Helper.WriteText(fileName, content);

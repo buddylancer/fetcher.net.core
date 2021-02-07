@@ -15,9 +15,13 @@ namespace Bula.Fetcher {
         /// Index page name 
         public const String INDEX_PAGE = "";
         /// Action page name 
-        public const String ACTION_PAGE = "action";
+        public const String ACTION_PAGE = "action.aspx";
         /// RSS-feeds page name 
-        public const String RSS_PAGE = "rss";
+        public const String RSS_PAGE = "rss.aspx";
+        /// Current API output format (can be "Json" or "Xml" for now) 
+        public const String API_FORMAT = "Json";
+        /// Current API output content type (can be "application/json" or "text/xml" for now) 
+        public const String API_CONTENT = "application/json";
 
         /// Security code 
         public const String SECURITY_CODE = "1234";
@@ -83,7 +87,9 @@ namespace Bula.Fetcher {
         /// Show bottom blocks (Filtering and RSS) 
         public const Boolean SHOW_BOTTOM = true;
 
+        /// Powered By string 
         public const String POWERED_BY = "Buddy Fetcher for NET";
+        /// GitHub repository 
         public const String GITHUB_REPO = "buddylancer/fetcher.net";
     } 
 }

@@ -67,6 +67,8 @@ namespace Bula.Fetcher {
         public String Site;
         /// Is request for mobile version? 
         public Boolean IsMobile;
+        /// Optional -- API used. Currently can be blank for HTML or "rest" (for REST API) 
+        public String Api;
         /// Current language 
         public String Lang;
 

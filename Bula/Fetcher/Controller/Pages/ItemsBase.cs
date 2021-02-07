@@ -32,7 +32,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 if (!Request.IsInteger(Request.Get("list"))) {
                     var prepare = new Hashtable();
                     prepare["[#ErrMessage]"] = "Incorrect list number!";
-                    this.Write("Bula/Fetcher/View/error.html", prepare);
+                    this.Write("error", prepare);
                     return false;
                 }
             }
@@ -59,7 +59,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var prepare = new Hashtable();
             prepare["[#ErrMessage]"] = errMessage;
-            this.Write("Bula/Fetcher/View/error.html", prepare);
+            this.Write("error", prepare);
             return false;
         }
 
@@ -74,7 +74,8 @@ namespace Bula.Fetcher.Controller.Pages {
             var row = new Hashtable();
             var itemId = INT(oItem[idField]);
             var urlTitle = STR(oItem["s_Url"]);
-            var itemHref = this.context.ImmediateRedirect ? GetRedirectItemLink(itemId, urlTitle) :
+            var itemHref = this.context.ImmediateRedirect ?
+                    GetRedirectItemLink(itemId, urlTitle) :
                     GetViewItemLink(itemId, urlTitle);
             row["[#Link]"] = itemHref;
             if ((count % 2) == 0)
@@ -106,8 +107,10 @@ namespace Bula.Fetcher.Controller.Pages {
             var d_Date = Util.ShowTime(STR(oItem["d_Date"]));
             if (this.context.IsMobile)
                 d_Date = Strings.Replace("-", " ", d_Date);
-            else
+            else {
+                if (BLANK(this.context.Api))
                 d_Date = Strings.ReplaceFirst(" ", "<br/>", d_Date);
+            }
             row["[#Date]"] = d_Date;
             return row;
         }
@@ -128,11 +131,10 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <param name="urlTitle">Normalized title (to include in the link).</param>
         /// <returns>Resulting external link.</returns>
         public String GetRedirectItemLink(int itemId, String urlTitle) {
-            return CAT(
-                Config.TOP_DIR,
-                (this.context.FineUrls ? "redirect/item/" : CAT(Config.ACTION_PAGE, "?p=do_redirect_item&id=")), itemId,
-                (urlTitle != null ? CAT(this.context.FineUrls ? "/" : "&title=", urlTitle) : null)
-            );
+            var link = this.GetLink(Config.ACTION_PAGE, "?p=do_redirect_item&id=", "redirect/item/", itemId);
+            if (!BLANK(urlTitle))
+                link = this.AppendLink(link, "&title=", "/", urlTitle);
+            return link;
         }
 
         /// <summary>
@@ -151,11 +153,10 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <param name="urlTitle">Normalized title (to include in the link).</param>
         /// <returns>Resulting internal link.</returns>
         public String GetViewItemLink(int itemId, String urlTitle) {
-            return CAT(
-                Config.TOP_DIR,
-                (this.context.FineUrls ? "item/" : CAT(Config.INDEX_PAGE, "?p=view_item&id=")), itemId,
-                (urlTitle != null ? CAT(this.context.FineUrls ? "/" : "&title=", urlTitle) : null)
-            );
+            var link = this.GetLink(Config.INDEX_PAGE, "?p=view_item&id=", "item/", itemId);
+            if (!BLANK(urlTitle))
+                link = this.AppendLink(link, "&title=", "/", urlTitle);
+            return link;
         }
 
         /// <summary>
@@ -164,18 +165,14 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <param name="listNo">Page no.</param>
         /// <returns>Resulting internal link to the page.</returns>
         protected String GetPageLink(int listNo) {
-            var href = CAT(
-                Config.TOP_DIR,
-                (this.context.FineUrls ?
-                    "items" : CAT(Config.INDEX_PAGE, "?p=items")),
-                (BLANK(Request.Get("source")) ? null :
-                    CAT((this.context.FineUrls ? "/source/" : "&amp;source="), Request.Get("source"))),
-                (!this.context.Contains("filter") || BLANK(this.context["filter"]) ? null :
-                    CAT((this.context.FineUrls ? "/filter/" : "&amp;filter="), this.context["filter"])),
-                (listNo == 1 ? null :
-                    CAT((this.context.FineUrls ? "/list/" : "&list="), listNo))
-            );
-            return href;
+            var link = this.GetLink(Config.INDEX_PAGE, "?p=items", "items");
+            if (Request.Contains("source") && !BLANK(Request.Get("source")))
+                link = this.AppendLink(link, "&source=", "/source/", Request.Get("source"));
+            if (this.context.Contains("filter") && !BLANK(this.context["filter"]))
+                link = this.AppendLink(link, "&amp;filter=", "/filter/", this.context["filter"]);
+            if (listNo > 1)
+                link = this.AppendLink(link, "&list=", "/list/", listNo);
+            return link;
         }
 
         //abstract void Execute();

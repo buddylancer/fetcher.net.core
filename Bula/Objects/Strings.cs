@@ -191,6 +191,5 @@ namespace Bula.Objects {
             }
             return sb.ToString();
         }
-
     }
 }

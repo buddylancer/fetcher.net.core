@@ -31,13 +31,13 @@ namespace Bula.Fetcher.Controller.Pages {
             var prepare = new Hashtable();
             if (!Request.Contains("id")) {
                 prepare["[#ErrMessage]"] = "Item ID is required!";
-                this.Write("Bula/Fetcher/View/error.html", prepare);
+                this.Write("error", prepare);
                 return null;
             }
             var id = Request.Get("id");
             if (!Request.IsInteger(id)) {
                 prepare["[#ErrMessage]"] = "Item ID must be positive integer!";
-                this.Write("Bula/Fetcher/View/error.html", prepare);
+                this.Write("error", prepare);
                 return null;
             }
 
@@ -60,7 +60,7 @@ namespace Bula.Fetcher.Controller.Pages {
             var dsItems = doItem.GetById(INT(id));
             if (dsItems == null || dsItems.GetSize() == 0) {
                 prepare["[#ErrMessage]"] = "Wrong item ID!";
-                this.Write("Bula/Fetcher/View/error.html", prepare);
+                this.Write("error", prepare);
                 return;
             }
 
@@ -74,20 +74,11 @@ namespace Bula.Fetcher.Controller.Pages {
                 leftWidth = "20%";
 
             var idField = doItem.GetIdField();
-            var redirectItem = CAT(Config.TOP_DIR,
-                (this.context.FineUrls ? "redirect/item/" : CAT(Config.ACTION_PAGE, "?p=do_redirect_item&id=")),
-                oItem[idField]);
-            prepare["[#RedirectLink]"] = redirectItem;
+            prepare["[#RedirectLink]"] = this.GetLink(Config.ACTION_PAGE, "?p=do_redirect_item&id=", "redirect/item/", oItem[idField]);
             prepare["[#LeftWidth]"] = leftWidth;
             prepare["[#Title]"] = Util.Show(title);
             prepare["[#InputTitle]"] = Util.Safe(title);
-
-            var redirectSource = CAT(
-                Config.TOP_DIR,
-                (this.context.FineUrls ? "redirect/source/" : CAT(Config.ACTION_PAGE, "?p=do_redirect_source&source=")),
-                sourceName
-            );
-            prepare["[#RedirectSource]"] = redirectSource;
+            prepare["[#RedirectSource]"] = this.GetLink(Config.ACTION_PAGE, "?p=do_redirect_source&source=", "redirect/source/", sourceName);
             prepare["[#SourceName]"] = sourceName;
             prepare["[#Date]"] = Util.ShowTime(STR(oItem["d_Date"]));
             prepare["[#Creator]"] = STR(oItem["s_Creator"]);
@@ -105,9 +96,9 @@ namespace Bula.Fetcher.Controller.Pages {
             if (Config.CACHE_PAGES)
                 prepare["[#Home]"] = Util.ShowFromCache(engine, this.context.CacheFolder, "home", "Home", "p=home&from_view_item=1");
             else
-                prepare["[#Home]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Pages/Home");
+                prepare["[#Home]"] = engine.IncludeTemplate("Pages/Home");
 
-            this.Write("Bula/Fetcher/View/Pages/view_item.html", prepare);
+            this.Write("Pages/view_item", prepare);
         }
     }
 }

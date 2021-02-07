@@ -40,9 +40,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var doItem = new DOItem();
 
-            var allItemsHref =
-                CAT(Config.TOP_DIR, (this.context.FineUrls ? null : CAT(Config.INDEX_PAGE, "?p=")), "items");
-            prepare["[#BrowseItemsLink]"] = allItemsHref;
+            prepare["[#BrowseItemsLink]"] = this.GetLink(Config.INDEX_PAGE, "?p=", null, "items");
 
             var source = (String)null;
             var search = (String)null;
@@ -58,7 +56,7 @@ namespace Bula.Fetcher.Controller.Pages {
             }
             prepare["[#Items]"] = items;
 
-            this.Write("Bula/Fetcher/View/Pages/home.html", prepare);
+            this.Write("Pages/home", prepare);
         }
     }
 }
