@@ -32,6 +32,7 @@ echo > %log%
 
 rem Just for debugging -- remove on production!!!
 rem goto :PAGES
+
 :CREATE
 echo *** Starting 1_create.bat >> %log%
 call 1_create.bat
@@ -48,12 +49,20 @@ call 3_styles.bat
 echo *** Starting 4_pages.bat >> %log%
 call 4_pages.bat
 
-***:ACTIONS
-echo *** Starting 5_actions.bat >> %log%
+:PAGES_MOBILE
+echo *** Starting 4_pages.bat for mobile >> %log%
+call 4_pages.bat mobile
+
+:PAGES_REST
+echo *** Starting 4_pages.bat for REST >> %log%
+call 4_pages.bat rest
+
+:ACTIONS
+echo *** Starting 6_actions.bat >> %log%
 call 5_actions.bat
 
 :VIEW
-echo *** Starting 6_view.bat >> %log%
+echo *** Starting 5_view.bat >> %log%
 call 6_view.bat
 
 :VIEW_MOBILE
