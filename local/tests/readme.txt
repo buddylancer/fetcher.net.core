@@ -6,7 +6,11 @@ Microsoft Windows, NET Core Framework 2.0+, Microsoft IIS (with URL rewrite) + A
 
 
 1. Local test website
-Configure local test website to be hosted on www.ff.com:8000 (main) and m.ff.com:8000 (mobile)
+Configure local test IIS website to be hosted on www.ff.com:8000 (main) and m.ff.com:8000 (mobile)
+Create new application pool (say "NET Core 2.0") with "No managed code" CLR version.
+Assign this application pool to newly created IIS website.
+Set Read/Execute permissions for .\Bula\Fetcher\Web.Core folder to virtual user "IIS AppPool\NET Core 2.0"
+Set Modify permissions for .\local\cache folder to virtual user "IIS AppPool\NET Core 2.0"
 
 Add following hosts into C:\Windows\System32\drivers\etc\hosts
 127.0.0.1 ff.com

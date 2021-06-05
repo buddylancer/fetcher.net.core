@@ -79,7 +79,7 @@ namespace Bula.Fetcher.Controller {
         public String IncludeTemplate(String className, String defaultMethod = "Execute") {
             var engine = this.context.PushEngine(false);
             var prefix = "Bula/Fetcher/Controller/";
-            var fileName = 
+            var fileName =
                 CAT(prefix, className, ".cs");
 
             var content = (String)null;
@@ -116,11 +116,11 @@ namespace Bula.Fetcher.Controller {
 
             var content = "";
             if (BLANK(this.context.Api))
-                content += (CAT("\n<!-- BEGIN ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->\n"));
+                content += (CAT(EOL, "<!-- BEGIN ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->", EOL));
             if (!BLANK(template))
-            content += (this.ProcessTemplate(template, hash));
+                content += (this.ProcessTemplate(template, hash));
             if (BLANK(this.context.Api))
-                content += (CAT("<!-- END ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->\n"));
+                content += (CAT("<!-- END ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->", EOL));
             return content;
         }
 
@@ -172,7 +172,7 @@ namespace Bula.Fetcher.Controller {
                 trimmed = true;
             }
             if (trim)
-            line = line.Trim();
+                line = line.Trim();
             return line;
         }
 
@@ -189,7 +189,7 @@ namespace Bula.Fetcher.Controller {
                 hash["[#Is_Mobile]"] = 1;
             }
             var trimLine = true;
-            var trimEnd = "\n";
+            var trimEnd = EOL;
             var ifMode = 0;
             var repeatMode = 0;
             var ifBuf = new ArrayList();

@@ -109,7 +109,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 d_Date = Strings.Replace("-", " ", d_Date);
             else {
                 if (BLANK(this.context.Api))
-                d_Date = Strings.ReplaceFirst(" ", "<br/>", d_Date);
+                    d_Date = Strings.ReplaceFirst(" ", "<br/>", d_Date);
             }
             row["[#Date]"] = d_Date;
             return row;

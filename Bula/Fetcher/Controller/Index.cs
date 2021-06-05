@@ -72,7 +72,7 @@ namespace Bula.Fetcher.Controller {
             var idFromVars = Request.Contains("id") ? Request.Get("id") : null;
             var title = Config.SITE_NAME;
             if (pFromVars != "home")
-                title = CAT(title, " :: ", pFromVars, (!NUL(idFromVars)? CAT(" :: ", idFromVars) : null));
+                title = CAT(title, " :: ", pFromVars, (!NUL(idFromVars) ? CAT(" :: ", idFromVars) : null));
 
             prepare["[#Title]"] = title; //TODO -- need unique title on each page
             prepare["[#Keywords]"] = Config.SITE_KEYWORDS;

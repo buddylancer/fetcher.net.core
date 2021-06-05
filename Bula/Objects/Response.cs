@@ -20,8 +20,7 @@ namespace Bula.Objects {
         /// Write text to current response.
         /// </summary>
         /// <param name="input">Text to write.</param>
-        public static void Write(String input)
-        {
+        public static void Write(String input) {
             if (input.Length == 0)
                 return;
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input);
@@ -58,4 +57,5 @@ namespace Bula.Objects {
             CurrentResponse().Body.Dispose();
        }
     }
+
 }

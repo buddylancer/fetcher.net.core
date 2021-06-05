@@ -30,7 +30,6 @@ namespace Bula.Objects {
             return AspNetCoreCompatibility.CompatibilityHttpContextAccessor.Current.Request;
         }
 
-
         /// <summary>
         /// Get all variables of given type.
         /// </summary>
@@ -39,8 +38,7 @@ namespace Bula.Objects {
         public static Hashtable GetVars(int type) {
             Hashtable hash = new Hashtable();
             IEnumerator<KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>> vars = null;
-            switch (type)
-            {
+            switch (type) {
                 case Request.INPUT_GET:
                 default:
                     vars = CurrentRequest().Query.GetEnumerator();
@@ -74,8 +72,7 @@ namespace Bula.Objects {
         /// <param name="name">Variable name.</param>
         /// <returns>Requested variable.</returns>
         public static String GetVar(int type, String name) {
-            switch (type)
-            {
+            switch (type) {
                 case Request.INPUT_GET:
                 default:
                     if (CurrentRequest().Query.ContainsKey(name))
