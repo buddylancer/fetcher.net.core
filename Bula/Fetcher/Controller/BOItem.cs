@@ -5,9 +5,9 @@
 
 namespace Bula.Fetcher.Controller {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
-    using System.Collections;
     using System.Text.RegularExpressions;
     using Bula.Objects;
     using Bula.Model;
@@ -246,7 +246,7 @@ namespace Bula.Fetcher.Controller {
                         includeFlag |= true;
                 }
                 if (includeFlag) {
-                    ArrayList arrayList = Arrays.CreateArrayList(categoryTags); arrayList.Add(name);
+                    var arrayList = Arrays.CreateArrayList(categoryTags); arrayList.Add(name);
                     categoryTags = (String[])arrayList.ToArray(typeof(String));
                 }
             }
@@ -285,6 +285,14 @@ namespace Bula.Fetcher.Controller {
         /// <summary>
         /// Generate URL title from item title.
         /// </summary>
+        /// <returns>Resulting URL title.</returns>
+        public String GetUrlTitle() {
+            return GetUrlTitle(false);
+        }
+
+        /// <summary>
+        /// Generate URL title from item title.
+        /// </summary>
         /// <param name="translit">Whether to apply transliteration or not.</param>
         /// <returns>Resulting URL title.</returns>
         ///
@@ -292,7 +300,7 @@ namespace Bula.Fetcher.Controller {
         /// "Officials: Fireworks Spark Utah Wildfire, Evacuations"
         ///    will become
         /// "officials-fireworks-spark-utah-wildfire-evacuations"
-        public String GetUrlTitle(Boolean translit = false) {
+        public String GetUrlTitle(Boolean translit) {
             var title = Strings.AddSlashes(this.title);
 
             if (translit)

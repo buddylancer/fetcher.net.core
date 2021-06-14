@@ -5,15 +5,19 @@
 
 namespace Bula.Objects {
     using System;
-
-    using Bula.Objects;
     using System.Collections;
     using System.Collections.Generic;
+
+    using Bula.Objects;
 
     /// <summary>
     /// Base helper class for processing query/form request.
     /// </summary>
     public class RequestBase : Bula.Meta {
+        /// Current Http request 
+        public Microsoft.AspNetCore.Http.HttpRequest HttpRequest = null;
+        /// Current response 
+        public Response response = null;
 
         /// Enum value (type) for getting POST parameters 
         public const int INPUT_POST = 0;
@@ -26,8 +30,12 @@ namespace Bula.Objects {
         /// Enum value (type) for getting SERVER parameters 
         public const int INPUT_SERVER = 5;
 
-        private static Microsoft.AspNetCore.Http.HttpRequest CurrentRequest() {
-            return AspNetCoreCompatibility.CompatibilityHttpContextAccessor.Current.Request;
+        public RequestBase () { }
+
+        public RequestBase (Object currentRequest) {
+            if (NUL(currentRequest))
+                return;
+            HttpRequest = (Microsoft.AspNetCore.Http.HttpRequest)currentRequest;
         }
 
         /// <summary>
@@ -35,21 +43,20 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="type">Required type.</param>
         /// <returns>Requested variables.</returns>
-        public static Hashtable GetVars(int type) {
+        public Hashtable GetVars(int type) {
             Hashtable hash = new Hashtable();
             IEnumerator<KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>> vars = null;
             switch (type) {
                 case Request.INPUT_GET:
                 default:
-                    vars = CurrentRequest().Query.GetEnumerator();
+                    vars = HttpRequest.Query.GetEnumerator();
                     break;
                 case Request.INPUT_POST:
-                    if (CurrentRequest().Method != "POST")
+                    if (HttpRequest.Method != "POST")
                         return hash;
-                    vars = CurrentRequest().Form.GetEnumerator();
                     break;
                 case Request.INPUT_SERVER:
-                    vars = CurrentRequest().Headers.GetEnumerator();
+                    vars = HttpRequest.Headers.GetEnumerator();
                     break;
             }
             while (vars.MoveNext()) {
@@ -71,30 +78,29 @@ namespace Bula.Objects {
         /// <param name="type">Required type.</param>
         /// <param name="name">Variable name.</param>
         /// <returns>Requested variable.</returns>
-        public static String GetVar(int type, String name) {
+        public String GetVar(int type, String name) {
             switch (type) {
                 case Request.INPUT_GET:
                 default:
-                    if (CurrentRequest().Query.ContainsKey(name))
-                        return CurrentRequest().Query[name];
+                    if (HttpRequest.Query.ContainsKey(name))
+                        return HttpRequest.Query[name];
                     else
                         return null;
                 case Request.INPUT_POST:
-                    if (CurrentRequest().Method == "POST" && CurrentRequest().Form.ContainsKey(name))
-                        return CurrentRequest().Form[name];
+                    if (HttpRequest.Method == "POST" && HttpRequest.Form.ContainsKey(name))
+                        return HttpRequest.Form[name];
                     else
                         return null;
                 case Request.INPUT_SERVER: // ServeVariables???
                     if (mapHeaders.ContainsKey(name)) {
-                        if (CurrentRequest().Headers.ContainsKey(mapHeaders[name]))
-                            return CurrentRequest().Headers[mapHeaders[name]];
+                        if (HttpRequest.Headers.ContainsKey(mapHeaders[name]))
+                            return HttpRequest.Headers[mapHeaders[name]];
                         else
                             return null;
                     }
                     else
                         return null;
             }
-
         }
 
         private static Dictionary<string, string> mapHeaders = new Dictionary<string, string>()

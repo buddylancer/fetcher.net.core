@@ -1,2 +1,2 @@
 ﻿@page
-@{ (new Bula.Fetcher.Controller.Testing.GetFeed(new Bula.Fetcher.Context())).Execute(); }
+@{ (new Bula.Fetcher.Controller.Testing.GetFeed(new Bula.Fetcher.Context(Request, Response))).Execute(); }
