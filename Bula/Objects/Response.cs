@@ -30,7 +30,7 @@ namespace Bula.Objects {
                 return;
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input);
             for (int start = 0; start < bytes.Length; start += bufSize) {
-                System.Threading.Thread.Sleep(1); //TODO -- workaround for now
+                System.Threading.Thread.Sleep(20); //TODO -- workaround for now
                 int length = bufSize;
                 if (start + length > bytes.Length)
                     length = bytes.Length - start;
