@@ -8,6 +8,7 @@ namespace Bula.Fetcher.Controller {
     using System.Collections;
 
     using Bula.Fetcher;
+    using Bula.Objects;
     using System.Text.RegularExpressions;
     using Bula.Objects;
     using Bula.Model;
@@ -40,8 +41,8 @@ namespace Bula.Fetcher.Controller {
                     errorMessage += "Empty source!";
                 else {
                     var doSource = new DOSource();
-                    Hashtable[] oSource =
-                        {new Hashtable()};
+                    THashtable[] oSource =
+                        {new THashtable()};
                     if (!doSource.CheckSourceName(source, oSource))
                         errorMessage += CAT("Incorrect source '", source, "'!");
                 }
@@ -67,8 +68,8 @@ namespace Bula.Fetcher.Controller {
                         errorMessage += "Empty filter!";
                     }
                     else {
-                        Hashtable[] oCategory =
-                            {new Hashtable()};
+                        THashtable[] oCategory =
+                            {new THashtable()};
                         if (doCategory.CheckFilterName(filterName, oCategory))
                             filter = STR(oCategory[0]["s_Filter"]);
                         else {
@@ -87,7 +88,7 @@ namespace Bula.Fetcher.Controller {
             // Check that parameters contain only 'source' or/and 'filter'
             var keys = this.context.Request.GetKeys();
             while (keys.MoveNext()) {
-                var key = (String)keys.Current;
+                var key = (String)keys.GetCurrent();
                 if (EQ(key, "source") || EQ(key, "filter") || EQ(key, "code") || EQ(key, "count")) {
                     //OK
                 }
@@ -249,6 +250,8 @@ namespace Bula.Fetcher.Controller {
                 //Helper.WriteText(cachedFile, Strings.Concat("\xEF\xBB\xBF", xmlContent));
                 Helper.WriteText(cachedFile, contentToCache);
             }
+            this.context.Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
+            this.context.Response.Write(contentToCache); //TODO -- BOM?
 
             if (DBConfig.Connection != null) {
                 DBConfig.Connection.Close();

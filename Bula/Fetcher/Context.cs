@@ -8,7 +8,6 @@ namespace Bula.Fetcher {
     using System.Collections;
 
     using Bula.Objects;
-
     using Bula.Fetcher.Controller;
 
     /// <summary>
@@ -19,24 +18,24 @@ namespace Bula.Fetcher {
         public Context() { Initialize(); }
 
         /// <summary>
-        /// Constructor for injecting Request and Response.
+        /// Constructor for injecting TRequest and TResponse.
         /// </summary>
         /// <param name="request">Current request.</param>
         /// <param name="response">Current response.</param>
         public Context (Object request, Object response) {
-            this.Request = new Request(request);
-            this.Response = new Response(response);
+            this.Request = new TRequest(request);
+            this.Response = new TResponse(response);
             this.Request.response = this.Response;
             this.Initialize();
         }
 
         /// Current request 
-        public Request Request = null;
+        public TRequest Request = null;
         /// Current response 
-        public Response Response = null;
+        public TResponse Response = null;
 
         /// Storage for internal variables 
-        protected Hashtable Values = new Hashtable();
+        protected THashtable Values = new THashtable();
 
         /// <summary>
         /// Get internal variable.
@@ -106,7 +105,7 @@ namespace Bula.Fetcher {
         public Boolean ImmediateRedirect = Config.IMMEDIATE_REDIRECT;
 
         /// Storage for global constants 
-        public Hashtable GlobalConstants = null;
+        public THashtable GlobalConstants = null;
 
         /// Is current request from test script? 
         public Boolean TestRun = false;
@@ -115,7 +114,7 @@ namespace Bula.Fetcher {
         /// Check whether current request is from test script?
         /// </summary>
         public void CheckTestRun() {
-            var httpTester = this.Request.GetVar(Request.INPUT_SERVER, "HTTP_USER_AGENT");
+            var httpTester = this.Request.GetVar(TRequest.INPUT_SERVER, "HTTP_USER_AGENT");
             if (httpTester == null)
                 return;
             if (EQ(httpTester, "TestFull")) {
@@ -154,7 +153,7 @@ namespace Bula.Fetcher {
             }
             this.LocalRoot = rootDir += "/";
 
-            this.Host = this.Request.GetVar(Request.INPUT_SERVER, "HTTP_HOST");
+            this.Host = this.Request.GetVar(TRequest.INPUT_SERVER, "HTTP_HOST");
             this.Site = Strings.Concat("http://", this.Host);
             this.IsMobile = this.Host.IndexOf("m.") == 0;
             this.Lang = this.Host.LastIndexOf(".ru") != -1 ? "ru" : "en";
@@ -177,7 +176,7 @@ namespace Bula.Fetcher {
         /// Define global constants.
         /// </summary>
         private void DefineConstants() {
-            this.GlobalConstants = new Hashtable();
+            this.GlobalConstants = new THashtable();
             this.GlobalConstants["[#Site_Name]"] = Config.SITE_NAME;
             this.GlobalConstants["[#Site_Comments]"] = Config.SITE_COMMENTS;
             this.GlobalConstants["[#Top_Dir]"] = Config.TOP_DIR;
@@ -215,7 +214,7 @@ namespace Bula.Fetcher {
                 this.GlobalConstants["[#Name_Custom2]"] = this["Name_Custom2"];
         }
 
-        private ArrayList EngineInstances = null;
+        private TArrayList EngineInstances = null;
         private int EngineIndex = -1;
 
         /// <summary>
@@ -227,8 +226,8 @@ namespace Bula.Fetcher {
             engine.SetPrintFlag(printFlag);
             this.EngineIndex++;
             if (this.EngineInstances == null)
-                this.EngineInstances = new ArrayList();
-            if (this.EngineInstances.Count <= this.EngineIndex)
+                this.EngineInstances = new TArrayList();
+            if (this.EngineInstances.Size() <= this.EngineIndex)
                 this.EngineInstances.Add(engine);
             else
                 this.EngineInstances[this.EngineIndex] = engine;

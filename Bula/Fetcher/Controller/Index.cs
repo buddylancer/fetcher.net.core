@@ -8,6 +8,7 @@ namespace Bula.Fetcher.Controller {
     using System.Collections;
 
     using Bula.Fetcher;
+    using Bula.Objects;
     using System.Text.RegularExpressions;
     using Bula.Objects;
     using Bula.Model;
@@ -66,7 +67,7 @@ namespace Bula.Fetcher.Controller {
 
             var engine = this.context.PushEngine(true);
 
-            var prepare = new Hashtable();
+            var prepare = new THashtable();
             prepare["[#Site_Name]"] = Config.SITE_NAME;
             var pFromVars = this.context.Request.Contains("p") ? this.context.Request["p"] : "home";
             var idFromVars = this.context.Request.Contains("id") ? this.context.Request["id"] : null;
@@ -99,7 +100,7 @@ namespace Bula.Fetcher.Controller {
             if (/*Config.RssAllowed != null && */Config.SHOW_BOTTOM) {
                 // Get bottom block either from cache or build it from the scratch
                 if (Config.CACHE_PAGES)
-                    prepare["[#Bottom]"] = Util.ShowFromCache(engine, this.context.CacheFolder, "bottom", "Bottom");
+                    prepare["[#Bottom]"] = Util.ShowFromCache(engine, this.context.CacheFolder, BLANK(apiName) ? "bottom" : CAT(apiName, "_bottom"), "Bottom");
                 else
                     prepare["[#Bottom]"] = engine.IncludeTemplate("Bottom");
             }

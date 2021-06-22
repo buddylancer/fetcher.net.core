@@ -73,9 +73,9 @@ namespace Bula.Fetcher.Model {
         public String BuildSqlFilter(String filter) {
             String[] filterChunks = Strings.Split("~", filter);
             String[] includeChunks = SIZE(filterChunks) > 0 ?
-                Strings.Split("|", filterChunks[0]) : null;
+                Strings.Split("\\|", filterChunks[0]) : null;
             String[] excludeChunks = SIZE(filterChunks) > 1 ?
-                Strings.Split("|", filterChunks[1]) : null;
+                Strings.Split("\\|", filterChunks[1]) : null;
             var includeFilter = "";
             for (int n = 0; n < SIZE(includeChunks); n++) {
                 if (includeFilter.Length != 0)
@@ -141,7 +141,7 @@ namespace Bula.Fetcher.Model {
 
             String query2 = Strings.Concat(
                 " SELECT _this.", this.idField, ", s.s_SourceName, _this.s_Title, _this.s_Url, _this.d_Date, _this.s_Category, ",
-                " _this.s_Creator, _this.s_Custom1, _this.s_Custom2, s.s_SourceName ",
+                " _this.s_Creator, _this.s_Custom1, _this.s_Custom2 ",
                 " FROM ", this.tableName, " _this ",
                 " LEFT JOIN sources s ON (s.i_SourceId = _this.i_SourceLink ) ",
                 " WHERE _this.", this.idField, " IN (", inList, ") ",

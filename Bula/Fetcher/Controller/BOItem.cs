@@ -21,7 +21,7 @@ namespace Bula.Fetcher.Controller {
         /// Source name 
         private String source = null;
         /// RSS-item 
-        private Hashtable item = null;
+        private THashtable item = null;
 
         /// Link to external item 
         public String link = null;
@@ -51,7 +51,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="source">Current processed source.</param>
         /// <param name="item">Current processed RSS-item from given source.</param>
-        public BOItem (String source, Hashtable item) {
+        public BOItem (String source, THashtable item) {
             this.Initialize(source, item);
         }
 
@@ -60,7 +60,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="source">Current processed source.</param>
         /// <param name="item">Current processed RSS-item from given source.</param>
-        private void Initialize(String source, Hashtable item) {
+        private void Initialize(String source, THashtable item) {
             this.source = source;
             this.item = item;
 
@@ -141,7 +141,7 @@ namespace Bula.Fetcher.Controller {
                 description = description.Replace(" \n", "\n");
             while (description.IndexOf("\n\n\n") != -1)
                 description = description.Replace("\n\n\n", "\n\n");
-            description = Regex.Replace(description, "\n\n[ \t]*[+\\-\\*][^+\\-\\*][ \t]*", "\n* ");
+            description = Regex.Replace(description, "\n\n[ \t]*[\\+\\-\\*][^\\+\\-\\*][ \t]*", "\n* ");
             description = Regex.Replace(description, "[ \t]+", " ");
 
             this.description = description.Trim();
@@ -180,7 +180,7 @@ namespace Bula.Fetcher.Controller {
             var category = (String)null;
             if (categoryItem.Length != 0) {
                 String[] categoriesArr = categoryItem.Replace(",&,", " & ").Split(new char[] {','});
-                var categoriesNew = new ArrayList();
+                var categoriesNew = new TArrayList();
                 for (int c = 0; c < SIZE(categoriesArr); c++) {
                     var temp = categoriesArr[c];
                     if (BLANK(temp.Trim()))
@@ -221,8 +221,9 @@ namespace Bula.Fetcher.Controller {
             //if (BLANK(this.description))
             //    return;
 
-            String[] categoryTags = BLANK(this.category) ?
-                Strings.EmptyArray() : this.category.Split(new char[] {','});
+            var categoryTags = new TArrayList();
+            if (!BLANK(this.category))
+                categoryTags.AddAll(this.category.Split(new char[] {','}));
             for (int n1 = 0; n1 < dsCategories.GetSize(); n1++) {
                 var oCategory = dsCategories.GetRow(n1);
                 var rssAllowedKey = STR(oCategory["s_CatId"]);
@@ -231,9 +232,9 @@ namespace Bula.Fetcher.Controller {
                 var filterValue = STR(oCategory["s_Filter"]);
                 String[] filterChunks = Strings.Split("~", filterValue);
                 String[] includeChunks = SIZE(filterChunks) > 0 ?
-                    Strings.Split("|", filterChunks[0]) : Strings.EmptyArray();
+                    Strings.Split("\\|", filterChunks[0]) : Strings.EmptyArray();
                 String[] excludeChunks = SIZE(filterChunks) > 1 ?
-                    Strings.Split("|", filterChunks[1]) : Strings.EmptyArray();
+                    Strings.Split("\\|", filterChunks[1]) : Strings.EmptyArray();
 
                 var includeFlag = false;
                 for (int n2 = 0; n2 < SIZE(includeChunks); n2++) {
@@ -251,18 +252,19 @@ namespace Bula.Fetcher.Controller {
                         includeFlag &= false;
                 }
                 if (includeFlag) {
-                    var arrayList = Arrays.CreateArrayList(categoryTags); arrayList.Add(name);
-                    categoryTags = (String[])arrayList.ToArray(typeof(String));
-                }
+                    categoryTags.Add(name);
+                 }
             }
-            if (SIZE(categoryTags) == 0)
+            if (categoryTags.Size() == 0)
                 return;
 
             //TODO
-            //ArrayList uniqueCategories = this.NormalizeList(categoryTags, lang);
+            //TArrayList uniqueCategories = this.NormalizeList(categoryTags, lang);
             //category = String.Join(", ", uniqueCategories);
 
-            this.category = Strings.Join(", ", categoryTags);
+            this.category = Strings.Join(", ", (String[])categoryTags.ToArray(
+                typeof(String)
+            ));
         }
 
         /// <summary>
@@ -276,7 +278,7 @@ namespace Bula.Fetcher.Controller {
                 else if (!BLANK(this.item["source"]))
                     this.creator = STR(this.item["source"]);
                 else if (!BLANK(this.item["dc"])) { //TODO implement [dc][creator]
-                    var temp = (Hashtable)this.item["dc"];
+                    var temp = (THashtable)this.item["dc"];
                     if (!BLANK(temp["creator"]))
                         this.creator = STR(temp["creator"]);
                 }
@@ -313,7 +315,7 @@ namespace Bula.Fetcher.Controller {
 
             title = Regex.Replace(title, "\\&amp\\;", " and ");
             title = Regex.Replace(title, "[^A-Za-z0-9\\-\\. ]", " ");
-            title = Regex.Replace(title, " +", " ");
+            title = Regex.Replace(title, "[ ]+", " ");
             title = title.Trim();
             title = Regex.Replace(title, "\\.+", "-");
             title = Regex.Replace(title, " \\- ", "-");

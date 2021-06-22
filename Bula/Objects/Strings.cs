@@ -24,6 +24,10 @@ namespace Bula.Objects {
             return new String[0];
         }
 
+        public static int IndexOf(String sample, String input) {
+            return input.IndexOf(sample);
+        }
+
         /// <summary>
         /// Convert first char of a string to upper case.
         /// </summary>
@@ -126,8 +130,8 @@ namespace Bula.Objects {
         /// <returns>Array of resulting strings.</returns>
         public static String[] Split(String divider, String input) {
             String[] chunks =
-                Regex.Split(input, Regex.Escape(divider));
-            var result = new ArrayList();
+                Regex.Split(input, divider);
+            var result = new TArrayList();
             for (int n = 0; n < SIZE(chunks); n++)
                 result.Add(chunks[n]);
             return (String[])result.ToArray(typeof(String));
@@ -153,7 +157,7 @@ namespace Bula.Objects {
         /// <param name="limit">Max number of replacements [optional].</param>
         /// <returns>Resulting string.</returns>
         public static String Replace(String from, String to, String input, int limit) {
-            return limit != 0 ? (new Regex(Regex.Escape(from))).Replace(input, to, limit) : input.Replace(from, to);
+            return limit != 0 ? (new Regex(from)).Replace(input, to, limit) : input.Replace(from, to);
         }
 
         /// <summary>
@@ -184,14 +188,32 @@ namespace Bula.Objects {
         /// <param name="template">Input template.</param>
         /// <param name="hash">Set of key/value pairs.</param>
         /// <returns>Resulting string.</returns>
-        public static String ReplaceInTemplate(String template, Hashtable hash) {
-            System.Text.StringBuilder sb = new System.Text.StringBuilder(template);
-            IEnumerator keys = hash.Keys.GetEnumerator();
+        public static String ReplaceInTemplate(String template, THashtable hash) {
+            var keys = new TEnumerator(hash.Keys.GetEnumerator());
             while (keys.MoveNext()) {
-                String key = STR(keys.Current);
-                sb.Replace(key, STR(hash[key]));
+                var key = STR(keys.GetCurrent());
+                if (Strings.IndexOf(key, template) != -1)
+                    template = Strings.Replace(key, STR(hash[key]), template);
             }
-            return sb.ToString();
+            return template;
         }
+
+        public static String Trim(String input) {
+            return Trim(input, null);
+        }
+
+        /// <summary>
+        /// Trim this string.
+        /// </summary>
+        /// <param name="chars">Which chars to trim [optional].</param>
+        /// <returns>Resulting string.</returns>
+        public static String Trim(String input, String chars) {
+            if (chars == null)
+                chars = " \\n\\r\\t\\v\\0";
+            input = Regex.Replace(input, CAT("^", "[", chars, "]*"), "");
+            input = Regex.Replace(input, CAT("[", chars, "]*$"), "");
+            return input;
+        }
+
     }
 }

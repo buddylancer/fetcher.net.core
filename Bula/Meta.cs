@@ -37,7 +37,7 @@ namespace Bula
         /// <param name="value">Input object</param>
         /// <returns></returns>
         public static bool NUL(object value) {
-            return value == null || value == System.DBNull.Value;
+            return value == null || value is Bula.Objects.TNull;
         }
 
         /// <summary>
@@ -76,8 +76,10 @@ namespace Bula
         {
             if (NUL(value))
                 return null;
-	        if (value is String)
+            if (value is String)
                 return (String)value;
+            else if (value is DateTime)
+                return ((DateTime)value).ToString(DateTimes.SQL_DTS);
             return value.ToString();
         }
 
@@ -181,8 +183,8 @@ namespace Bula
         public static int SIZE(object val) {
             if (val == null) return 0;
             else if (val is Object[]) return ((Object[])val).Length;
-            else if (val is ArrayList) return ((ArrayList)val).Count;
-            else if (val is Hashtable) return ((Hashtable)val).Count;
+            else if (val is TArrayList) return ((TArrayList)val).Size();
+            else if (val is THashtable) return ((THashtable)val).Size();
             else if (val is String) return ((String)val).Length;
             return 0;
         }

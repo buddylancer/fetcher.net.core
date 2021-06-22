@@ -13,11 +13,11 @@ namespace Bula.Objects {
     /// <summary>
     /// Base helper class for processing query/form request.
     /// </summary>
-    public class RequestBase : Bula.Meta {
+    public class TRequestBase : Bula.Meta {
         /// Current Http request 
         public Microsoft.AspNetCore.Http.HttpRequest HttpRequest = null;
         /// Current response 
-        public Response response = null;
+        public TResponse response = null;
 
         /// Enum value (type) for getting POST parameters 
         public const int INPUT_POST = 0;
@@ -30,9 +30,9 @@ namespace Bula.Objects {
         /// Enum value (type) for getting SERVER parameters 
         public const int INPUT_SERVER = 5;
 
-        public RequestBase () { }
+        public TRequestBase () { }
 
-        public RequestBase (Object currentRequest) {
+        public TRequestBase (Object currentRequest) {
             if (NUL(currentRequest))
                 return;
             HttpRequest = (Microsoft.AspNetCore.Http.HttpRequest)currentRequest;
@@ -43,20 +43,24 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="type">Required type.</param>
         /// <returns>Requested variables.</returns>
-        public Hashtable GetVars(int type) {
-            Hashtable hash = new Hashtable();
+        public THashtable GetVars(int type) {
+            THashtable hash = new THashtable();
             IEnumerator<KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>> vars = null;
             switch (type) {
-                case Request.INPUT_GET:
+                case TRequest.INPUT_GET:
                 default:
+                    if (HttpRequest.Method != "GET")
+                        return hash;
                     vars = HttpRequest.Query.GetEnumerator();
                     break;
-                case Request.INPUT_POST:
+                case TRequest.INPUT_POST:
                     if (HttpRequest.Method != "POST")
                         return hash;
+                    vars = HttpRequest.Form.GetEnumerator();
                     break;
-                case Request.INPUT_SERVER:
+                case TRequest.INPUT_SERVER:
                     vars = HttpRequest.Headers.GetEnumerator();
+                    hash.Add("QUERY_STRING", HttpRequest.QueryString);
                     break;
             }
             while (vars.MoveNext()) {
@@ -80,30 +84,36 @@ namespace Bula.Objects {
         /// <returns>Requested variable.</returns>
         public String GetVar(int type, String name) {
             switch (type) {
-                case Request.INPUT_GET:
+                case TRequest.INPUT_GET:
                 default:
                     if (HttpRequest.Query.ContainsKey(name))
                         return HttpRequest.Query[name];
                     else
                         return null;
-                case Request.INPUT_POST:
+                case TRequest.INPUT_POST:
                     if (HttpRequest.Method == "POST" && HttpRequest.Form.ContainsKey(name))
                         return HttpRequest.Form[name];
                     else
                         return null;
-                case Request.INPUT_SERVER: // ServeVariables???
-                    if (mapHeaders.ContainsKey(name)) {
+                case TRequest.INPUT_SERVER: // ServeVariables???
+                    if (mapHeaders.ContainsKey(name))
+                    {
                         if (HttpRequest.Headers.ContainsKey(mapHeaders[name]))
                             return HttpRequest.Headers[mapHeaders[name]];
-                        else
-                            return null;
-                    }
-                    else
+                        else if (name.Equals("QUERY_STRING"))
+                        {
+                            String query = HttpRequest.QueryString.Value;
+                            if (query.StartsWith("?"))
+                                query = query.Substring(1);
+                            return query;
+                        }
                         return null;
-            }
+                    }
+                    return null;
         }
+    }
 
-        private static Dictionary<string, string> mapHeaders = new Dictionary<string, string>()
+        private static SortedList<string, string> mapHeaders = new SortedList<string, string>()
         {
             { "HTTP_USER_AGENT", "User-Agent" },
             //{ "APPL_PHYSICAL_PATH", null },

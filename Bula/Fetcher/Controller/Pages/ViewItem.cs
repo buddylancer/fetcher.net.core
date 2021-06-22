@@ -27,21 +27,21 @@ namespace Bula.Fetcher.Controller.Pages {
         /// Fast check of input query parameters.
         /// </summary>
         /// <returns>Parsed parameters (or null in case of any error).</returns>
-        public Hashtable Check() {
-            var prepare = new Hashtable();
+        public THashtable Check() {
+            var prepare = new THashtable();
             if (!this.context.Request.Contains("id")) {
                 prepare["[#ErrMessage]"] = "Item ID is required!";
                 this.Write("error", prepare);
                 return null;
             }
             var id = this.context.Request["id"];
-            if (!Request.IsInteger(id)) {
+            if (!TRequest.IsInteger(id)) {
                 prepare["[#ErrMessage]"] = "Item ID must be positive integer!";
                 this.Write("error", prepare);
                 return null;
             }
 
-            var pars = new Hashtable();
+            var pars = new THashtable();
             pars["id"] = id;
             return pars;
         }
@@ -54,7 +54,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var id = (String)pars["id"];
 
-            var prepare = new Hashtable();
+            var prepare = new THashtable();
 
             var doItem = new DOItem();
             var dsItems = doItem.GetById(INT(id));
@@ -86,7 +86,7 @@ namespace Bula.Fetcher.Controller.Pages {
             prepare["[#SourceLink]"] = this.GetLink(Config.INDEX_PAGE, "?p=items&source=", "items/source/", sourceName);
             prepare["[#Date]"] = Util.ShowTime(STR(oItem["d_Date"]));
             if (!NUL(oItem["s_Creator"]))
-            prepare["[#Creator]"] = STR(oItem["s_Creator"]);
+                prepare["[#Creator]"] = STR(oItem["s_Creator"]);
             prepare["[#Description]"] = oItem.ContainsKey("t_Description") ? Util.Show(STR(oItem["t_Description"])) : "";
             prepare["[#ItemID]"] = oItem[idField];
             if (this.context.Contains("Name_Category") && !NUL(oItem["s_Category"]))

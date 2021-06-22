@@ -11,13 +11,13 @@ namespace Bula.Objects {
     /// <summary>
     /// Helper class for processing server response.
     /// </summary>
-    public class Response : Bula.Meta {
+    public class TResponse : Bula.Meta {
         private static readonly int bufSize = 8192;
 
         /// Current response 
         private Microsoft.AspNetCore.Http.HttpResponse httpResponse = null;
 
-        public Response (Object response) {
+        public TResponse (Object response) {
             httpResponse = (Microsoft.AspNetCore.Http.HttpResponse)response;
         }
 
@@ -30,7 +30,7 @@ namespace Bula.Objects {
                 return;
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input);
             for (int start = 0; start < bytes.Length; start += bufSize) {
-                System.Threading.Thread.Sleep(20); //TODO -- workaround for now
+                System.Threading.Thread.Sleep(5); //TODO -- workaround for now
                 int length = bufSize;
                 if (start + length > bytes.Length)
                     length = bytes.Length - start;
