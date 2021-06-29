@@ -12,13 +12,31 @@ namespace Bula.Objects {
     /// Helper class for processing server response.
     /// </summary>
     public class TResponse : Bula.Meta {
-        private static readonly int bufSize = 8192;
+        private static readonly int bufSize = 1024;
 
         /// Current response 
         private Microsoft.AspNetCore.Http.HttpResponse httpResponse = null;
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="currentResponse">Current http response object.</param>
         public TResponse (Object response) {
             httpResponse = (Microsoft.AspNetCore.Http.HttpResponse)response;
+        }
+
+        /// <summary>
+        /// Write text to current response.
+        /// </summary>
+        /// <param name="input">Text to write.</param>
+        /// <param name="lang">Language to tranlsate to (default - none).</param>
+        public void Write(String input, String langFile) {
+            if (langFile != null) {
+                if (!Translator.IsInitialized())
+                    Translator.Initialize(langFile);
+                input = Translator.Translate(input);
+            }
+            Write(input);
         }
 
         /// <summary>
@@ -30,12 +48,12 @@ namespace Bula.Objects {
                 return;
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input);
             for (int start = 0; start < bytes.Length; start += bufSize) {
-                System.Threading.Thread.Sleep(5); //TODO -- workaround for now
+                System.Threading.Thread.Sleep(10); //TODO -- workaround for now
                 int length = bufSize;
                 if (start + length > bytes.Length)
                     length = bytes.Length - start;
                 httpResponse.Body.WriteAsync(bytes, start, length);
-                httpResponse.Body.Flush();
+                httpResponse.Body.FlushAsync();
             }
         }
 

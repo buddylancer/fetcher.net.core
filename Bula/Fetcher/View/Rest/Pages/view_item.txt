@@ -7,7 +7,9 @@
 "Redirect Source" : "[#RedirectSource]",
 "Published" : "[#Date]",
 "[#Name_Creator]" : "[#Creator]",
+<!--#if [#Description]-->
 "Description" : "[#Description]"
+<!--#end if-->
 "Item ID" : "[#ItemID]",
 <!--#if [#Category]-->
 "[#Name_Categories]" : "[#Category]",
