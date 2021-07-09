@@ -53,7 +53,7 @@ namespace Bula.Fetcher.Controller.Actions {
             var doTime = new DOTime();
 
             var dsTimes = doTime.GetById(1);
-            var timeShift = 240; // 4 min
+            var timeShift = -1; // 240; // 4 min
             var currentTime = DateTimes.GetTime();
             if (dsTimes.GetSize() > 0) {
                 var oTime = dsTimes.GetRow(0);

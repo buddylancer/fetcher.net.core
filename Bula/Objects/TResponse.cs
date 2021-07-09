@@ -63,9 +63,20 @@ namespace Bula.Objects {
         /// <param name="name">Header name.</param>
         /// <param name="value">Header value.</param>
         public void WriteHeader(String name, String value) {
+            WriteHeader(name, value, "UTF-8");
+        }
+
+        /// <summary>
+        /// Write header to current response.
+        /// </summary>
+        /// <param name="name">Header name.</param>
+        /// <param name="value">Header value.</param>
+        /// <param name="encoding">Response encoding.</param>
+        public void WriteHeader(String name, String value, String encoding) {
             if (httpResponse.Headers.ContainsKey(name))
                 httpResponse.Headers.Remove(name);
             httpResponse.Headers.Add(name, value);
+            //if (encoding != null) httpResponse.ContentEncoding = System.Text.Encoding.GetEncoding(encoding);
         }
 
         /// <summary>

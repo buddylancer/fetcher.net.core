@@ -18,9 +18,9 @@ namespace Bula.Fetcher {
         /// Index page name 
         public const String INDEX_PAGE = "";
         /// Action page name 
-        public const String ACTION_PAGE = "action";
+        public const String ACTION_PAGE = "action[#File_Ext]";
         /// RSS-feeds page name 
-        public const String RSS_PAGE = "rss";
+        public const String RSS_PAGE = "rss[#File_Ext]";
         /// Current API output format (can be "Json" or "Xml" for now) 
         public const String API_FORMAT = "Json";
         /// Current API output content type (can be "application/json" or "text/xml" for now) 
@@ -62,15 +62,15 @@ namespace Bula.Fetcher {
 
         // Fill these fields by your site data
         /// Site language (default - null) 
-        public const String SITE_LANGUAGE = null;          
+        public const String SITE_LANGUAGE = null;
         /// Site name 
         public const String SITE_NAME = "Buddy Fetcher";
         /// Site comments 
         public const String SITE_COMMENTS = "Latest News Headlines";
         /// Site keywords 
-        public const String SITE_KEYWORDS = "Buddy Fetcher, rss, fetcher, aggregator, NET, MySQL";
+        public const String SITE_KEYWORDS = "Buddy Fetcher, rss, fetcher, aggregator, [#Platform], MySQL";
         /// Site description 
-        public const String SITE_DESCRIPTION = "Buddy Fetcher is a simple RSS fetcher/aggregator written in NET/MySQL";
+        public const String SITE_DESCRIPTION = "Buddy Fetcher is a simple RSS fetcher/aggregator written in [#Platform]/MySQL";
 
         /// Name of item (in singular form) 
         public const String NAME_ITEM = "Headline";
@@ -101,8 +101,8 @@ namespace Bula.Fetcher {
         public const String TIME_ZONE = "GMT";
 
         /// Powered By string 
-        public const String POWERED_BY = "Buddy Fetcher for .NET Core";
+        public const String POWERED_BY = "Buddy Fetcher for [#Platform]";
         /// GitHub repository 
-        public const String GITHUB_REPO = "buddylancer/fetcher.net.core";
-    } 
+        public const String GITHUB_REPO = "buddylancer/fetcher.[#Platform]";
+    }
 }
