@@ -41,7 +41,7 @@ namespace Bula.Fetcher {
         /// Show what source an item is originally from 
         public const Boolean SHOW_FROM = false;
         /// Whether to show images for sources 
-        public const Boolean SHOW_IMAGES = false;
+        public const Boolean SHOW_IMAGES = true;
         /// File extension for images 
         public const String EXT_IMAGES = "gif";
         /// Show an item or immediately redirect to external source item 
